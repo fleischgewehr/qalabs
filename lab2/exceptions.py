@@ -1,4 +1,5 @@
 from typing import Optional
+print('reloaded')
 
 class BaseError(Exception):
 
@@ -9,13 +10,16 @@ class BaseError(Exception):
 		return self._is_critical
 
 
-class KeyboardSpilledTeaError(Exception):
+class KeyboardSpilledTeaError(BaseError):
 	"""Anyways, you bought it for 10 bucks."""
 	_is_critical = None
 	
 
 
-class CatIsNotFedError(Exception):
+class CatIsNotFedError(BaseError):
 	"""You are dead meat."""
 	_is_critical = None
 	
+
+class SomeExtraordinaryError(BaseError):
+	_is_critical = None
