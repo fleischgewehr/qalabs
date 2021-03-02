@@ -1,5 +1,6 @@
-from qa.exceptions import CatIsNotFedError, KeyboardSpilledTeaError
-from qa.manager import ExceptionManager
+from manager import ExceptionManager
+from exceptions import CatIsNotFedError, KeyboardSpilledTeaError
+from server import Server
 
 import pytest
 
@@ -13,7 +14,7 @@ import pytest
 	],
 )
 def test_counter(errors, critical_counter_expected, regular_counter_expected):
-	em = ExceptionManager()
+	em = ExceptionManager(Server())
 	for error in errors:
 		em.check(error())
 
@@ -26,5 +27,5 @@ def test_counter(errors, critical_counter_expected, regular_counter_expected):
 	[(CatIsNotFedError, True), (KeyboardSpilledTeaError, False)],
 )
 def test_is_critical(error, critical):
-	em = ExceptionManager()
+	em = ExceptionManager(Server())
 	assert em.is_critical(error()) is critical

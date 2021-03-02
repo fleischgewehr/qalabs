@@ -26,7 +26,6 @@ class ExceptionManager:
 	def server_handle_exc(self, exc: Exception) -> None:
 		request = Request(exc)
 		response = self._server.handle_request(request).status.value
-
 		return response
 
 
