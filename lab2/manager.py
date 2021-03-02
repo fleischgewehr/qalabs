@@ -1,7 +1,7 @@
 from exceptions import BaseError
 from configparser import ConfigParser
 from server import Server, Request, Response
-print('Relaoded')
+
 
 class ExceptionManager:
 
@@ -25,14 +25,14 @@ class ExceptionManager:
 
 	def server_handle_exc(self, exc: Exception) -> None:
 		request = Request(exc)
-		server_resp = self._server.send_request(request)
+		response = self._server.handle_request(request).status.value
+
+		return response
 
 
 	def check(self, exc: Exception) -> None:
 		
-		try :
-			self.server_handle_exc(exc)
-		except TypeError: 
+		if not self.server_handle_exc(exc):
 			self.server_exc_not_handled += 1
 
 		if not issubclass(type(exc), BaseError):

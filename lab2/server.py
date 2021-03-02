@@ -1,15 +1,18 @@
 from configparser import ConfigParser
 from exceptions import BaseError
-print('reloaded')
+from enum import Enum
+from typing import List
+
+
+class Status(Enum):
+	ERR = False
+	OK = True
 
 class Request():
 	_exception: str
 
 	def __init__(self, exc: BaseError) -> None:
-		if not issubclass(type(exc), BaseError):
-			raise TypeError
-		else:
-			self._exception = exc.__class__.__name__
+		self._exception = exc.__class__.__name__
 
 	@property
 	def exception(self):
@@ -17,26 +20,33 @@ class Request():
 
 
 class Response():
-	_handled: bool
+	_status: str
 
 	def __init__(self, handled: bool) -> None:
-		self._handled = handled
+		self._status = Status(handled)
 
 	@property
-	def handled(self):
-		return self._handled
+	def status(self):
+		return self._status
 
 
 class Server():
 
+	_allowed_errors: List[str] = [
+	'KeyboardSpilledTeaError',
+	'CatIsNotFedError'
+	]
+
 	def __init__(self, config='server.ini') -> None:
 		pass
 
-	def send_request(self, request: Request) -> Response:
-		handled = True 
-		return self.__send_responce(handled)
+	def handle_request(self, request: Request) -> Response:
+		exc = request.exception
 
-	def __send_responce(self, handled:bool) -> Response:
+		handled = exc in self._allowed_errors
+		return self.send_response(handled)
+
+	def send_response(self, handled:bool) -> Response:
 		return Response(handled)
 
 
