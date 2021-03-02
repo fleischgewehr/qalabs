@@ -21,5 +21,6 @@ class CatIsNotFedError(BaseError):
 	_is_critical = None
 	
 
-class SomeExtraordinaryError(BaseError):
+class SomeExtraordinaryError(Exception):
+	"""I don't even know what it is."""
 	_is_critical = None

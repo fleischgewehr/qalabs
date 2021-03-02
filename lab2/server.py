@@ -6,7 +6,10 @@ class Request():
 	_exception: str
 
 	def __init__(self, exc: BaseError) -> None:
-		self._exception = exc.__class__.__name__
+		if not issubclass(type(exc), BaseError):
+			raise TypeError
+		else:
+			self._exception = exc.__class__.__name__
 
 	@property
 	def exception(self):
@@ -25,15 +28,12 @@ class Response():
 
 
 class Server():
-	_config: ConfigParser
 
 	def __init__(self, config='server.ini') -> None:
-		self._config = ConfigParser()
-		self._config.read(config)
+		pass
 
 	def send_request(self, request: Request) -> Response:
-		exec_name = request.exception
-		handled = self._config.getboolean(exec_name, '_can_handle')
+		handled = True 
 		return self.__send_responce(handled)
 
 	def __send_responce(self, handled:bool) -> Response:
