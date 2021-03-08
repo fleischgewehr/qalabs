@@ -16,10 +16,9 @@ class ExceptionManager:
 	_config: ConfigParser
 	_server: Server
 
-	def __init__(
-				self, server: Server, 
-				config: ConfigParser = ConfigParserFactory().create_parser('manager.ini')
-				) -> None:
+	def __init__(self, server: Server, 
+		config: ConfigParser = ConfigParserFactory().create_parser('manager.ini')
+		) -> None:
 
 		self._server = server
 		self._config = config
@@ -43,6 +42,7 @@ class ExceptionManager:
 	def server_handle_exc(self, exc: Exception) -> None:
 		request = Request(exc)
 		response = self._server.handle_request(request).status.value
+
 		return response
 
 	def server_exc_inc(self) -> None:
