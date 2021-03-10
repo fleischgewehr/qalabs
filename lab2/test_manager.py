@@ -104,9 +104,6 @@ def test_server_handle_error(errors, critical_counter_expected,
 	for error in errors:
 		em.check(error())
 
-	print(em.server_exc_not_handled)
-	print(len(errors))
-
 	assert em.critical_exc_counter == critical_counter_expected
 	assert em.regular_exc_counter == regular_counter_expected
 	assert em.server_exc_not_handled == len(errors)
