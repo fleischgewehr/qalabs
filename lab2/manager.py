@@ -9,6 +9,8 @@ class ConfigParserFactory():
 		conf.read(conf_path)
 		return conf
 
+
+
 class ExceptionManager:
 
 	critical_exc_counter: int
@@ -42,7 +44,6 @@ class ExceptionManager:
 	def server_handle_exc(self, exc: Exception) -> None:
 		request = Request(exc)
 		response = self._server.handle_request(request).status.value
-
 		return response
 
 	def server_exc_inc(self) -> None:

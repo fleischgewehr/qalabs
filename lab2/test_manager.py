@@ -97,8 +97,20 @@ def test_factory(errors, critical_status,
 )
 def test_server_handle_error(errors, critical_counter_expected, 
 	regular_counter_expected):
+
+	def false_response_and_count_calls(func):
+		func.call_count = 0
+		def side_effect(*_):
+			func.call_count += 1
+			return Response(False)
+
+		return side_effect
+
+
 	mock_server = Server()
-	mock_server.handle_request = MagicMock(return_value=Response(False))
+	mock_server.handle_request = MagicMock(
+		side_effect = false_response_and_count_calls(mock_server))
+
 	em = ExceptionManager(server = mock_server)
 	
 	for error in errors:
@@ -106,4 +118,5 @@ def test_server_handle_error(errors, critical_counter_expected,
 
 	assert em.critical_exc_counter == critical_counter_expected
 	assert em.regular_exc_counter == regular_counter_expected
-	assert em.server_exc_not_handled == len(errors)
+	assert mock_server.call_count == len(errors)
+
