@@ -3,7 +3,7 @@ from exceptions import CatIsNotFedError, KeyboardSpilledTeaError, SomeExtraordin
 from server import Server, Response
 
 from configparser import ConfigParser
-from unittest.mock import MagicMock
+from unittest.mock import Mock, DEFAULT
 
 import pytest
 
@@ -98,18 +98,20 @@ def test_factory(errors, critical_status,
 def test_server_handle_error(errors, critical_counter_expected, 
 	regular_counter_expected):
 
-	def false_response_and_count_calls(func):
-		func.call_count = 0
-		def side_effect(*_):
-			func.call_count += 1
-			return Response(False)
+	def count_calls(inst):
+		inst.call_count = 0
+		def side_effect(*args):
+			print(args)
+			inst.call_count += 1
+			return DEFAULT
 
 		return side_effect
 
 
 	mock_server = Server()
-	mock_server.handle_request = MagicMock(
-		side_effect = false_response_and_count_calls(mock_server))
+	mock_server.handle_request = Mock(
+		return_value = Response(False),
+		side_effect = count_calls(mock_server))
 
 	em = ExceptionManager(server = mock_server)
 	
