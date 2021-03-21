@@ -1,0 +1,3 @@
+*.pyc
+gecko
+geckodriver.log
